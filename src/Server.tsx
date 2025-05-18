@@ -50,7 +50,7 @@ function Server() {
   return (
     <Show when={embed()} fallback={<div>Loading...</div>}>
       <Show when={!params.hide_header}><Header /></Show>
-      <Show when={!params.hide_activity}><ActivityList users={embed()?.onlineUsers!} /></Show>
+      <Show when={!params.hide_activities}><ActivityList users={embed()?.onlineUsers!} /></Show>
       <Show when={!params.hide_members}><MemberList embed={embed()!} /></Show>
       <Footer embed={embed()!} />
     </Show>
