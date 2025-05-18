@@ -1,0 +1,77 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 4px;
+  color: var(--text-color);
+  background-color: var(--pane-darker);
+  text-decoration: none;
+  gap: 12px;
+  .appName {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .slogan {
+    opacity: 0.6;
+    font-size: 12px;
+  }
+}
+
+
+.footer {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 4px;
+  color: var(--text-color);
+  background-color: var(--pane-darker);
+  font-weight: bold;
+  gap: 12px;
+
+  .joinButton {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    color: var(--text-color);
+    background-color: var(--primary);
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  .serverInfo {
+    flex: 1;
+    font-size: 18px;
+    .memberCount {
+      color: var(--success);
+      font-size: 12px;
+    }
+  }
+}
+
+.memberList {
+  display: flex;
+  overflow-y: auto;
+  flex: 1;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: 4px;
+  background-color: var(--pane);
+  gap: 6px;
+}
+
+.avatarContainer {
+  display: flex;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.memberName {
+  opacity: 0.8;
+  font-size: 14px;
+}
