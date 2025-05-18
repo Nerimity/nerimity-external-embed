@@ -18,6 +18,7 @@ html, body {
 
 * {
   box-sizing: border-box;
+  scrollbar-color: var(--primary);
 }
 #root {
   display: flex;
@@ -26,4 +27,21 @@ html, body {
   height: 100%;
   padding: 4px;
   gap: 4px;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 999px;
 }

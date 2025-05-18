@@ -15,6 +15,12 @@
     opacity: 0.6;
     font-size: 12px;
   }
+  .logo {
+    height: 36px;
+    width: 36px;
+    background-color: black;
+    border-radius: 50%;
+  }
 }
 
 
@@ -69,9 +75,50 @@
 .memberInfo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  .statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
 }
 .memberName {
   opacity: 0.8;
   font-size: 14px;
+}
+
+
+.activityList {
+  display: flex;
+  gap: 6px;
+
+}
+.activityItem  {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  background-color: var(--pane-darker);
+  border-radius: 6px;
+  width: 160px;
+  flex-shrink: 0;
+  .activityUser {
+    font-weight: bold;
+    display: flex;
+    gap: 6px;
+  }
+  .activityInfo, .activityName, .activityTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .activityName {
+    opacity: 0.6;
+    font-size: 14px;
+  }
+  .activityTitle {
+    opacity: 0.8;
+    font-size: 12px;
+
+  }
 }

@@ -16,10 +16,15 @@ interface OnlineUser {
   username: string;
   hexColor: string;
   id: 0;
-  presence: {
-    custom: string;
-    status: 2;
-    activity: null;
+  presence: Presence;
+}
+interface Presence {
+  custom: string;
+  status: number;
+  activity: {
+    name: string;
+    action: string;
+    title?: string;
   };
 }
 
@@ -39,16 +44,47 @@ const fetchServer = async (id: string) => {
 };
 
 function Server() {
-  const [params] = useSearchParams<{ id?: string }>();
+  const [params] = useSearchParams<{ id?: string; hide_header: string; hide_members: string; hide_activities: string; }>();
   const [embed] = createResource(() => params.id, fetchServer);
 
   return (
     <Show when={embed()} fallback={<div>Loading...</div>}>
-      <Header server={embed()!.server} />
-      <MemberList embed={embed()!} />
+      <Show when={!params.hide_header}><Header /></Show>
+      <Show when={!params.hide_activity}><ActivityList users={embed()?.onlineUsers!} /></Show>
+      <Show when={!params.hide_members}><MemberList embed={embed()!} /></Show>
       <Footer embed={embed()!} />
     </Show>
   );
+}
+
+const ActivityList = (props: { users: OnlineUser[] }) => {
+  return (
+    <div class={style.activityList}>
+      <For each={props.users}>
+        {user => <Show when={user.presence.activity}><ActivityItem user={user} /></Show>}
+      </For>
+    </div>
+  )
+}
+
+const ActivityItem = (props: { user: OnlineUser }) => {
+  const activity = () => props.user.presence.activity;
+  return (
+    <div class={style.activityItem}>
+      <div class={style.activityUser}>
+        <Avatar
+          hash={props.user.avatar}
+          bgColor={props.user.hexColor}
+          size={20}
+        />
+        <div>{props.user.username}</div>
+      </div>
+      <div class={style.activityInfo}>
+        <div class={style.activityName}>{activity().name}</div>
+        <Show when={activity().title}><div class={style.activityTitle}>{activity().title}</div></Show>
+      </div>
+    </div>
+  )
 }
 
 const MemberList = (props: { embed: ExternalEmbed }) => {
@@ -61,7 +97,15 @@ const MemberList = (props: { embed: ExternalEmbed }) => {
   );
 };
 
+export const UserStatus = [
+  { name: "Offline", id: "offline", color: "#adadad" },
+  { name: "Online", id: "online", color: "#78e380" },
+  { name: "Looking To Play", id: "ltp", color: "#78a5e3" },
+  { name: "Away From Keyboard", id: "afk", color: "#e3a878" },
+  { name: "Do Not Disturb", id: "dnd", color: "#e37878" }
+];
 const MemberItem = (props: { member: OnlineUser }) => {
+  const statusToInfo = () => UserStatus[props.member.presence.status];
   return (
     <div class={style.memberItem}>
       <div class={style.memberInfo}>
@@ -70,6 +114,7 @@ const MemberItem = (props: { member: OnlineUser }) => {
           bgColor={props.member.hexColor}
           size={20}
         />
+        <div class={style.statusDot} style={{ background: statusToInfo()?.color }}></div>
         <div class={style.memberName}>{props.member.username}</div>
       </div>
     </div>
@@ -113,7 +158,7 @@ const Avatar = (props: {
   );
 };
 
-const Header = (props: { server: Server }) => {
+const Header = () => {
   return (
     <a
       class={style.header}
@@ -121,11 +166,7 @@ const Header = (props: { server: Server }) => {
       rel="noopener noreferrer"
       href="https://nerimity.com"
     >
-      <Avatar
-        path={props.server.avatar}
-        bgColor={props.server.hexColor}
-        size={35}
-      />
+      <img src="/logo.png" class={style.logo} />
       <div>
         <div class={style.appName}>Nerimity</div>
         <div class={style.slogan}>A modern and sleek chat app.</div>
@@ -137,7 +178,7 @@ const Footer = (props: { embed: ExternalEmbed }) => {
   const server = () => props.embed.server;
   return (
     <div class={style.footer}>
-      <Avatar path={server().avatar} bgColor={server().hexColor} size={35} />
+      <Avatar path={server().avatar} bgColor={server().hexColor} size={36} />
       <div class={style.serverInfo}>
         <div class={style.serverName}>{server().name}</div>
         <div class={style.memberCount}>
