@@ -32,6 +32,7 @@
   color: var(--text-color);
   background-color: var(--pane-darker);
   font-weight: bold;
+  text-decoration: none;
   gap: 12px;
 
   .joinButton {
@@ -43,7 +44,6 @@
     background-color: var(--primary);
     font-size: 16px;
     font-weight: bold;
-    text-decoration: none;
   }
   .serverInfo {
     flex: 1;

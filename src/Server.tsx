@@ -205,7 +205,12 @@ const Header = () => {
 const Footer = (props: { embed: ExternalEmbed }) => {
   const server = () => props.embed.server;
   return (
-    <div class={style.footer}>
+    <a
+      class={style.footer}
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`https://nerimity.com/i/${props.embed.serverInviteCode}`}
+    >
       <Avatar path={server().avatar} bgColor={server().hexColor} size={36} />
       <div class={style.serverInfo}>
         <div class={style.serverName}>{server().name}</div>
@@ -213,15 +218,8 @@ const Footer = (props: { embed: ExternalEmbed }) => {
           {props.embed.onlineMembersCount} Online
         </div>
       </div>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        class={style.joinButton}
-        href={`https://nerimity.com/i/${props.embed.serverInviteCode}`}
-      >
-        Join Server
-      </a>
-    </div>
+      <div class={style.joinButton}>Join Server</div>
+    </a>
   );
 };
 
