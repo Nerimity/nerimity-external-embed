@@ -10,13 +10,13 @@ interface Server {
   name: string;
 }
 
-interface OnlineUser {
+interface User {
   avatar: string;
   banner: string;
   username: string;
   hexColor: string;
   id: 0;
-  presence: Presence;
+  presence?: Presence;
 }
 interface Presence {
   custom: string;
@@ -33,7 +33,7 @@ interface ExternalEmbed {
   serverInviteCode: string;
   server: Server;
   onlineMembersCount: number;
-  onlineUsers: OnlineUser[];
+  users: User[];
 }
 
 const fetchServer = async (id: string) => {
@@ -44,31 +44,49 @@ const fetchServer = async (id: string) => {
 };
 
 function Server() {
-  const [params] = useSearchParams<{ id?: string; hide_header: string; hide_members: string; hide_activities: string; }>();
+  const [params] = useSearchParams<{
+    id?: string;
+    hide_header: string;
+    hide_members: string;
+    hide_activities: string;
+  }>();
   const [embed] = createResource(() => params.id, fetchServer);
 
   return (
-    <Show when={embed()} fallback={<div>Loading...</div>}>
-      <Show when={!params.hide_header}><Header /></Show>
-      <Show when={!params.hide_activities}><ActivityList users={embed()?.onlineUsers!} /></Show>
-      <Show when={!params.hide_members}><MemberList embed={embed()!} /></Show>
-      <Footer embed={embed()!} />
-    </Show>
+    <>
+      <Show when={!params.hide_header}>
+        <Header />
+      </Show>
+
+      <Show when={embed()} fallback={<div>Loading...</div>}>
+        <Show when={!params.hide_activities && embed()?.users?.length}>
+          <ActivityList users={embed()?.users!} />
+        </Show>
+        <Show when={!params.hide_members}>
+          <MemberList embed={embed()!} />
+        </Show>
+        <Footer embed={embed()!} />
+      </Show>
+    </>
   );
 }
 
-const ActivityList = (props: { users: OnlineUser[] }) => {
+const ActivityList = (props: { users: User[] }) => {
   return (
     <div class={style.activityList}>
       <For each={props.users}>
-        {user => <Show when={user.presence.activity}><ActivityItem user={user} /></Show>}
+        {(user) => (
+          <Show when={user.presence?.activity}>
+            <ActivityItem user={user} />
+          </Show>
+        )}
       </For>
     </div>
-  )
-}
+  );
+};
 
-const ActivityItem = (props: { user: OnlineUser }) => {
-  const activity = () => props.user.presence.activity;
+const ActivityItem = (props: { user: User }) => {
+  const activity = () => props.user.presence!.activity;
   return (
     <div class={style.activityItem}>
       <div class={style.activityUser}>
@@ -81,16 +99,18 @@ const ActivityItem = (props: { user: OnlineUser }) => {
       </div>
       <div class={style.activityInfo}>
         <div class={style.activityName}>{activity().name}</div>
-        <Show when={activity().title}><div class={style.activityTitle}>{activity().title}</div></Show>
+        <Show when={activity().title}>
+          <div class={style.activityTitle}>{activity().title}</div>
+        </Show>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const MemberList = (props: { embed: ExternalEmbed }) => {
   return (
     <div class={style.memberList}>
-      <For each={props.embed.onlineUsers}>
+      <For each={props.embed.users}>
         {(member) => <MemberItem member={member} />}
       </For>
     </div>
@@ -102,10 +122,10 @@ export const UserStatus = [
   { name: "Online", id: "online", color: "#78e380" },
   { name: "Looking To Play", id: "ltp", color: "#78a5e3" },
   { name: "Away From Keyboard", id: "afk", color: "#e3a878" },
-  { name: "Do Not Disturb", id: "dnd", color: "#e37878" }
+  { name: "Do Not Disturb", id: "dnd", color: "#e37878" },
 ];
-const MemberItem = (props: { member: OnlineUser }) => {
-  const statusToInfo = () => UserStatus[props.member.presence.status];
+const MemberItem = (props: { member: User }) => {
+  const statusToInfo = () => UserStatus[props.member.presence?.status || 0];
   return (
     <div class={style.memberItem}>
       <div class={style.memberInfo}>
@@ -114,14 +134,18 @@ const MemberItem = (props: { member: OnlineUser }) => {
           bgColor={props.member.hexColor}
           size={20}
         />
-        <div class={style.statusDot} style={{ background: statusToInfo()?.color }}></div>
+        <div
+          class={style.statusDot}
+          style={{ background: statusToInfo()?.color }}
+        ></div>
         <div class={style.memberName}>{props.member.username}</div>
       </div>
     </div>
   );
 };
 
-const hashToCdnLink = (hash: string, size: number = 20) => {
+const hashToCdnLink = (hash?: string, size: number = 20) => {
+  if (!hash) return undefined;
   return `https://cdn.nerimity.com/external-embed/${hash}?size=${size}&type=webp`;
 };
 const pathToCdnLink = (path?: string, size: number = 20) => {
@@ -145,15 +169,14 @@ const Avatar = (props: {
         height: `${props.size}px`,
       }}
     >
-      <Show when={props.hash || props.path}>
-        <img
-          class={style.avatar}
-          src={
-            pathToCdnLink(props.path, props.size) ||
-            hashToCdnLink(props.hash!, props.size)
-          }
-        />
-      </Show>
+      <img
+        class={style.avatar}
+        src={
+          pathToCdnLink(props.path, props.size) ||
+          hashToCdnLink(props.hash!, props.size) ||
+          "/profile.png"
+        }
+      />
     </div>
   );
 };

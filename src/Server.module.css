@@ -16,10 +16,10 @@
     font-size: 12px;
   }
   .logo {
-    height: 36px;
     width: 36px;
-    background-color: black;
+    height: 36px;
     border-radius: 50%;
+    background-color: black;
   }
 }
 
@@ -69,21 +69,27 @@
 .avatarContainer {
   display: flex;
   overflow: hidden;
+  flex-shrink: 0;
   border-radius: 50%;
 }
 
 .memberInfo {
   display: flex;
+  overflow: hidden;
   align-items: center;
   gap: 6px;
   .statusDot {
+    flex-shrink: 0;
     width: 8px;
     height: 8px;
     border-radius: 50%;
   }
 }
 .memberName {
+  overflow: hidden;
   opacity: 0.8;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 14px;
 }
 
@@ -96,21 +102,21 @@
 .activityItem  {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 6px;
-  background-color: var(--pane-darker);
-  border-radius: 6px;
-  width: 160px;
   flex-shrink: 0;
+  width: 160px;
+  padding: 6px;
+  border-radius: 6px;
+  background-color: var(--pane-darker);
+  gap: 6px;
   .activityUser {
-    font-weight: bold;
     display: flex;
+    font-weight: bold;
     gap: 6px;
   }
   .activityInfo, .activityName, .activityTitle {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .activityName {
     opacity: 0.6;
