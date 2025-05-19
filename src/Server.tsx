@@ -174,7 +174,7 @@ const Avatar = (props: {
         src={
           pathToCdnLink(props.path, props.size) ||
           hashToCdnLink(props.hash!, props.size) ||
-          "/profile.png"
+          "/external-embed/profile.png"
         }
       />
     </div>
@@ -189,7 +189,7 @@ const Header = () => {
       rel="noopener noreferrer"
       href="https://nerimity.com"
     >
-      <img src="/logo.png" class={style.logo} />
+      <img src="/external-embed/logo.png" class={style.logo} />
       <div>
         <div class={style.appName}>Nerimity</div>
         <div class={style.slogan}>A modern and sleek chat app.</div>

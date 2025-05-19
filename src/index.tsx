@@ -10,7 +10,7 @@ const root = document.getElementById("root");
 
 render(
   () => (
-    <Router>
+    <Router base="/external-embed">
       <Route path="/server" component={Server} />
     </Router>
   ),
