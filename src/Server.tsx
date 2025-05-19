@@ -52,6 +52,9 @@ function Server() {
   }>();
   const [embed] = createResource(() => params.id, fetchServer);
 
+  const usersWithActivity = () => embed()?.users.filter(u => u.presence?.activity)
+
+
   return (
     <>
       <Show when={!params.hide_header}>
@@ -59,8 +62,8 @@ function Server() {
       </Show>
 
       <Show when={embed()} fallback={<div>Loading...</div>}>
-        <Show when={!params.hide_activities && embed()?.users?.length}>
-          <ActivityList users={embed()?.users!} />
+        <Show when={!params.hide_activities && usersWithActivity()?.length}>
+          <ActivityList users={usersWithActivity()!} />
         </Show>
         <Show when={!params.hide_members}>
           <MemberList embed={embed()!} />
