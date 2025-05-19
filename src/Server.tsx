@@ -146,6 +146,7 @@ const MemberItem = (props: { member: User }) => {
 
 const hashToCdnLink = (hash?: string, size: number = 20) => {
   if (!hash) return undefined;
+
   return `https://cdn.nerimity.com/external-embed/${hash}?size=${size}&type=webp`;
 };
 const pathToCdnLink = (path?: string, size: number = 20) => {
@@ -172,6 +173,9 @@ const Avatar = (props: {
       <img
         crossOrigin="anonymous"
         class={style.avatar}
+        width={props.size + "px"}
+        height={props.size + "px"}
+        loading="lazy"
         src={
           pathToCdnLink(props.path, props.size) ||
           hashToCdnLink(props.hash!, props.size) ||
