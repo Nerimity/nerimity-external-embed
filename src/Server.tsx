@@ -170,6 +170,7 @@ const Avatar = (props: {
       }}
     >
       <img
+        crossOrigin="anonymous"
         class={style.avatar}
         src={
           pathToCdnLink(props.path, props.size) ||
