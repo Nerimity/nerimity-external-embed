@@ -38,7 +38,7 @@ interface ExternalEmbed {
 
 const fetchServer = async (id: string) => {
   const res = await fetch(
-    `https://nerimity.com/api/servers/${id}/external-embed.json`
+    `https://nerimity.com/api/servers/${id}/external-embed.json?owo=loal`
   );
   return res.json() as unknown as ExternalEmbed;
 };
@@ -52,8 +52,8 @@ function Server() {
   }>();
   const [embed] = createResource(() => params.id, fetchServer);
 
-  const usersWithActivity = () => embed()?.users.filter(u => u.presence?.activity)
-
+  const usersWithActivity = () =>
+    embed()?.users.filter((u) => u.presence?.activity);
 
   return (
     <>
@@ -98,7 +98,7 @@ const ActivityItem = (props: { user: User }) => {
           bgColor={props.user.hexColor}
           size={20}
         />
-        <div>{props.user.username}</div>
+        <div class={style.activityMemberName}>{props.user.username}</div>
       </div>
       <div class={style.activityInfo}>
         <div class={style.activityName}>{activity().name}</div>

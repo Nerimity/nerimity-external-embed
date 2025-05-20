@@ -111,6 +111,7 @@
   gap: 6px;
   .activityUser {
     display: flex;
+
     font-weight: bold;
     gap: 6px;
   }
@@ -127,5 +128,10 @@
     opacity: 0.8;
     font-size: 12px;
 
+  }
+  .activityMemberName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
