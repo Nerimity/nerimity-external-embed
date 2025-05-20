@@ -38,7 +38,7 @@ interface ExternalEmbed {
 
 const fetchServer = async (id: string) => {
   const res = await fetch(
-    `https://nerimity.com/api/servers/${id}/external-embed.json?owo=loal`
+    `https://nerimity.com/api/servers/${id}/external-embed.json`
   );
   return res.json() as unknown as ExternalEmbed;
 };
